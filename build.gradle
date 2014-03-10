@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        maven { url 'http://dl.bintray.com/vermeulen-mp/gradle-plugins' }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:0.5.0.M6"
+        classpath "org.gradle.api.plugins:gradle-heroku:0.9.6"
+    }
+}
+
+apply plugin: 'spring-boot'
+apply plugin: 'groovy'
+
+repositories {
+    maven {
+        mavenCentral()
+        url 'http://repo.spring.io/milestone'
+    }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC4"
+    compile "org.springframework.boot:spring-boot-starter-jetty:1.0.0.RC4"
+    compile "org.springframework.data:spring-data-mongodb:1.2.4.RELEASE"
+}
