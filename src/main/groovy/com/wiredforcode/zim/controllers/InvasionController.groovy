@@ -1,5 +1,6 @@
 package com.wiredforcode.zim.controllers
 
+import com.wiredforcode.zim.exception.InvaderNotFoundException
 import com.wiredforcode.zim.model.Quote
 import com.wiredforcode.zim.repos.QuoteRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,8 @@ class InvasionController {
     @RequestMapping("/invasion/{name}")
     public @ResponseBody ResponseEntity<Quote> quote(@PathVariable String name){
         def quotes = repository.findByName(name);
+        if(!quotes) throw new InvaderNotFoundException(name)
+
         def quote = quotes[(int)(Math.random() * quotes.size())]
         return new ResponseEntity<String>(quote, HttpStatus.OK)
     }
