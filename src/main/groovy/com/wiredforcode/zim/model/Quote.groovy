@@ -6,13 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field
 
 @Document()
 class Quote {
-
-    @Id
-    BigInteger id
-
-    @Field
-    String name
-
-    @Field
-    String message
+    @Id BigInteger id
+    @Field String name
+    @Field String message
 }
