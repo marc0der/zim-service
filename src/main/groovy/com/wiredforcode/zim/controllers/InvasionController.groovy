@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 class InvasionController {
 
-    @Autowired
     private QuoteRepository repository;
+
+    @Autowired
+    InvasionController(QuoteRepository repository){
+        this.repository = repository
+    }
 
     @RequestMapping("/invasion/{name}")
     public @ResponseBody ResponseEntity<Quote> quote(@PathVariable String name){
