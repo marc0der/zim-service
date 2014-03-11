@@ -1,3 +1,6 @@
+import org.gradle.api.*
+import org.gradle.api.tasks.*
+
 buildscript {
     repositories {
         mavenCentral()
@@ -24,4 +27,46 @@ dependencies {
     compile "org.springframework.data:spring-data-commons:1.6.2.RELEASE"
     compile "org.springframework.data:spring-data-mongodb:1.4.0.RELEASE"
     compile "org.mongodb:mongo-java-driver:2.9.1"
+}
+
+task startServer(type: ExecWait, dependsOn: ['build']) {
+    command 'java -jar build/libs/zim-service.jar'
+    ready 'Started Application'
+    directory '.'
+}
+
+task stopServer << {
+    def cmd = "lsof -Fp -i :8080"
+    def process = cmd.execute()
+    process.in.eachLine { line ->
+        def killProcess = "kill -9 ${ line.substring(1) }".execute()
+        killProcess.waitFor()
+    }
+}
+
+class ExecWait extends DefaultTask {
+    String command
+    String ready
+    String directory
+
+    @TaskAction
+    def spawnProcess() {
+
+        def builder = new ProcessBuilder(command.split(' '))
+        builder.redirectErrorStream(true)
+        builder.directory(new File(directory))
+        def process = builder.start()
+
+        def stdout = process.getInputStream()
+        def reader = new BufferedReader(new InputStreamReader(stdout))
+
+        def line
+        while ((line = reader.readLine()) != null) {
+            println line
+            if (line.contains(ready)) {
+                println "$command is ready"
+                break;
+            }
+        }
+    }
 }
