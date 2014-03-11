@@ -67,10 +67,8 @@ class ExecWait extends DefaultTask {
         def pid = f.getInt(process)
         pidFile << pid
 
-        def stdout = process.getInputStream()
-        def reader = new BufferedReader(new InputStreamReader(stdout))
-
         def line
+        def reader = new BufferedReader(new InputStreamReader(process.getInputStream()))
         while ((line = reader.readLine()) != null) {
             println line
             if (line.contains(ready)) {
