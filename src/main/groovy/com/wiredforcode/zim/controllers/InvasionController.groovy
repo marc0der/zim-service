@@ -1,7 +1,7 @@
 package com.wiredforcode.zim.controllers
 import com.wiredforcode.zim.exception.InvaderNotFoundException
-import com.wiredforcode.zim.exception.InvasionError
 import com.wiredforcode.zim.repos.QuoteRepository
+import com.wiredforcode.zim.response.InvasionErrorResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -34,7 +34,7 @@ class InvasionController {
 
     @ExceptionHandler(InvaderNotFoundException)
     @ResponseBody ResponseEntity handle(InvaderNotFoundException infe){
-        def error = new InvasionError(error: NOT_FOUND.value(), message: infe.message)
+        def error = new InvasionErrorResponse(error: NOT_FOUND.value(), message: infe.message)
         new ResponseEntity(error, NOT_FOUND)
     }
 }
