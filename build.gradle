@@ -36,12 +36,14 @@ task startServer(type: ExecWait, dependsOn: ['build']) {
 }
 
 task stopServer << {
-    def cmd = "lsof -Fp -i :8080"
+    def pidFile = file('.gradle-exec-wait.pid')
+    if(!pidFile.exists()) throw new GradleException("No server running!")
+
+    def pid = pidFile.text
+    def cmd = "kill $pid"
     def process = cmd.execute()
-    process.in.eachLine { line ->
-        def killProcess = "kill -9 ${ line.substring(1) }".execute()
-        killProcess.waitFor()
-    }
+    process.waitFor()
+    pidFile.delete()
 }
 
 class ExecWait extends DefaultTask {
@@ -52,10 +54,18 @@ class ExecWait extends DefaultTask {
     @TaskAction
     def spawnProcess() {
 
+        def pidFile = new File('.gradle-exec-wait.pid')
+        if(pidFile.exists()) throw new GradleException("Server already running!")
+
         def builder = new ProcessBuilder(command.split(' '))
         builder.redirectErrorStream(true)
         builder.directory(new File(directory))
         def process = builder.start()
+
+        def f = process.class.getDeclaredField("pid")
+        f.accessible = true
+        def pid = f.getInt(process)
+        pidFile << pid
 
         def stdout = process.getInputStream()
         def reader = new BufferedReader(new InputStreamReader(stdout))
