@@ -22,7 +22,7 @@ class InvasionController {
     }
 
     @RequestMapping("/invasion/{name}")
-    public @ResponseBody ResponseEntity<Quote> quote(@PathVariable String name){
+    @ResponseBody ResponseEntity<Quote> quote(@PathVariable String name){
         def quotes = repository.findByName(name);
         if(!quotes) throw new InvaderNotFoundException(name)
 
