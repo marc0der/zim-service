@@ -16,12 +16,8 @@ import static org.springframework.http.HttpStatus.OK
 @Controller
 class InvasionController {
 
-    private QuoteRepository repository;
-
     @Autowired
-    InvasionController(QuoteRepository repository){
-        this.repository = repository
-    }
+    QuoteRepository repository;
 
     @RequestMapping("/invasion/{name}")
     @ResponseBody ResponseEntity quote(@PathVariable String name){
