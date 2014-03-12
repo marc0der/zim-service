@@ -19,7 +19,7 @@ And(~'^the Invader "([^"]*)" has a quote "([^"]*)"$') { String invader, String q
 
 And(~'^a Quote is requested for "([^"]*)"$') { String invader ->
     // Express the Regexp above with the code you wish you had
-    response = client.get(path:'/invasion/gir')
+    response = client.get(path:"/invasion/${invader}")
 }
 
 And(~'^we hear "([^"]*)"$') { String quote ->
