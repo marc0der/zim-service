@@ -62,16 +62,7 @@ task startServer(type: ExecWait, dependsOn: 'assemble') {
     directory '.'
 }
 
-task stopServer << {
-    def pidFile = file('.gradle-exec-wait.pid')
-    if(!pidFile.exists()) throw new GradleException("No server running!")
-
-    def pid = pidFile.text
-    def cmd = "kill $pid"
-    def process = cmd.execute()
-    process.waitFor()
-    pidFile.delete()
-}
+task stopServer(type: ExecKill)
 
 task functionalTest(type: Test) {
     testClassesDir = sourceSets.functionalTest.output.classesDir
@@ -112,5 +103,19 @@ class ExecWait extends DefaultTask {
                 break;
             }
         }
+    }
+}
+
+class ExecKill extends DefaultTask {
+    @TaskAction
+    def killProcess(){
+        def pidFile = new File('.gradle-exec-wait.pid')
+        if(!pidFile.exists()) throw new GradleException("No server running!")
+
+        def pid = pidFile.text
+        def cmd = "kill $pid"
+        def process = cmd.execute()
+        process.waitFor()
+        pidFile.delete()
     }
 }
