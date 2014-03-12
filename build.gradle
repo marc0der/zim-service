@@ -26,10 +26,37 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC4"
     compile "org.springframework.data:spring-data-commons:1.6.2.RELEASE"
     compile "org.springframework.data:spring-data-mongodb:1.4.0.RELEASE"
-    compile "org.mongodb:mongo-java-driver:2.9.1"
+    runtime "org.mongodb:mongo-java-driver:2.9.1"
+    testCompile 'junit:junit:4.11'
+    testCompile 'info.cukes:cucumber-junit:1.1.5'
+    testCompile 'info.cukes:cucumber-groovy:1.1.5'
+    testCompile 'com.github.groovy-wslite:groovy-wslite:0.8.0'
+    //testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.41"
 }
 
-task startServer(type: ExecWait, dependsOn: ['build']) {
+test.testLogging.exceptionFormat = 'full'
+
+configurations {
+    functTestCompile.extendsFrom testCompile
+    functTestRuntime.extendsFrom testRuntime
+}
+
+ext {
+    functionalJettyHttpPort = 8037
+    functionalJettyStopPort = 9937
+    functionalJettyStopKey = 'stopKey'
+}
+
+sourceSets {
+    functionalTest {
+        groovy.srcDir file('src/testFunctional/groovy')
+        resources.srcDir     file('src/testFunctional/resources')
+        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.functTestCompile
+        runtimeClasspath = output + compileClasspath + configurations.functTestRuntime
+    }
+}
+
+task startServer(type: ExecWait, dependsOn: 'assemble') {
     command 'java -jar build/libs/zim-service.jar'
     ready 'Started Application'
     directory '.'
@@ -45,6 +72,15 @@ task stopServer << {
     process.waitFor()
     pidFile.delete()
 }
+
+task functionalTest(type: Test) {
+    testClassesDir = sourceSets.functionalTest.output.classesDir
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    dependsOn startServer
+    finalizedBy stopServer
+}
+
+check.dependsOn functionalTest
 
 class ExecWait extends DefaultTask {
     String command
