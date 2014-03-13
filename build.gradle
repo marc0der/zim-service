@@ -8,10 +8,12 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC3"
+        classpath 'com.sourcemuse.gradle.plugin:gradle-mongo-plugin:0.1.0'
     }
 }
 
 apply plugin: 'spring-boot'
+apply plugin: 'mongo'
 apply plugin: 'groovy'
 
 repositories {
@@ -26,12 +28,11 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC4"
     compile "org.springframework.data:spring-data-commons:1.6.2.RELEASE"
     compile "org.springframework.data:spring-data-mongodb:1.4.0.RELEASE"
-    runtime "org.mongodb:mongo-java-driver:2.9.1"
     testCompile 'junit:junit:4.11'
     testCompile 'info.cukes:cucumber-junit:1.1.5'
     testCompile 'info.cukes:cucumber-groovy:1.1.5'
     testCompile 'com.github.groovy-wslite:groovy-wslite:0.8.0'
-    //testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.41"
+    testCompile "org.mongodb:mongo-java-driver:2.9.1"
 }
 
 test.testLogging.exceptionFormat = 'full'
@@ -67,7 +68,7 @@ task stopServer(type: ExecKill)
 task functionalTest(type: Test) {
     testClassesDir = sourceSets.functionalTest.output.classesDir
     classpath = sourceSets.functionalTest.runtimeClasspath
-    dependsOn startServer
+    dependsOn startManagedMongoDb, startServer
     finalizedBy stopServer
 }
 
