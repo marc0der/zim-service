@@ -17,11 +17,11 @@ import static org.springframework.http.HttpStatus.OK
 class InvasionController {
 
     @Autowired
-    QuoteRepository repository;
+    QuoteRepository repository
 
     @RequestMapping("/invasion/{name}")
     @ResponseBody ResponseEntity quote(@PathVariable String name){
-        def quotes = repository.findByName(name);
+        def quotes = repository.findByName(name)
         if(!quotes) throw new InvaderNotFoundException(name)
 
         def quote = quotes[(int)(Math.random() * quotes.size())]
