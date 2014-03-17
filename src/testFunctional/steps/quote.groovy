@@ -4,14 +4,18 @@ import com.mongodb.WriteConcern
 import wslite.rest.RESTClient
 
 import static cucumber.api.groovy.EN.And
-import static cucumber.api.groovy.Hooks.Before
+import static cucumber.api.groovy.Hooks.*
 
 Before(){
     client = new RESTClient("http://localhost:8080")
     def mongo = new MongoClient()
     mongo.writeConcern = WriteConcern.NORMAL
-    def db = mongo.getDB("invasion")
+    db = mongo.getDB("invasion")
     quotes = db.createCollection("quote", new BasicDBObject())
+}
+
+After(){
+    db.getCollection("quote").drop()
 }
 
 And(~'^an Invader named "([^"]*)"$') { String invader ->
