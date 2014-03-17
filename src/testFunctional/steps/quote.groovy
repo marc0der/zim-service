@@ -18,7 +18,7 @@ And(~'^an Invader named "([^"]*)"$') { String invader ->
     quotes.insert(new BasicDBObject("name", invader))
 }
 
-And(~'^the Invader "([^"]*)" has a quote "([^"]*)"$') { String invader, String message ->
+And(~'^the Invader "([^"]*)" says "([^"]*)"$') { String invader, String message ->
     def query = new BasicDBObject("name", invader)
     def update = new BasicDBObject("name", invader).append("message", message)
     quotes.update(query, update)
