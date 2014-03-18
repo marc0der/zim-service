@@ -1,4 +1,4 @@
-package com.wiredforcode.zim.exception
+package zim
 
 class InvaderNotFoundException extends RuntimeException {
     InvaderNotFoundException(String name) {

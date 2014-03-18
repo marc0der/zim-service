@@ -1,4 +1,4 @@
-package com.wiredforcode.zim.response
+package zim
 
 class InvasionErrorResponse {
     int error

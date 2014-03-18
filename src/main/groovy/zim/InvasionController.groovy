@@ -1,7 +1,5 @@
-package com.wiredforcode.zim.controllers
-import com.wiredforcode.zim.exception.InvaderNotFoundException
-import com.wiredforcode.zim.repos.QuoteRepository
-import com.wiredforcode.zim.response.InvasionErrorResponse
+package zim
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller

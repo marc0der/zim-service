@@ -1,6 +1,5 @@
-package com.wiredforcode.zim.repos
+package zim
 
-import com.wiredforcode.zim.model.Quote
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 

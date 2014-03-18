@@ -1,4 +1,5 @@
-package com.wiredforcode.zim.config
+package zim
+
 import com.mongodb.Mongo
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
@@ -15,6 +16,6 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
     }
 
     String getMappingBasePackage() {
-        "com.wiredforcode.zim.model";
+        "zim";
     }
 }

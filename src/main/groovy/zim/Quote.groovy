@@ -1,4 +1,4 @@
-package com.wiredforcode.zim.model
+package zim
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
