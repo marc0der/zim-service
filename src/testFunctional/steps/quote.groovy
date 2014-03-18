@@ -29,7 +29,7 @@ And(~'^the Invader "([^"]*)" says "([^"]*)"$') { String invader, String message 
 }
 
 And(~'^a Quote is requested for "([^"]*)"$') { String invader ->
-    response = client.get(path:"/invasion/${invader}")
+    response = client.get(path:"/invader/${invader}")
 }
 
 And(~'^we hear "([^"]*)"$') { String quote ->

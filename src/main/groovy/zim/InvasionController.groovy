@@ -17,7 +17,7 @@ class InvasionController {
     @Autowired
     QuoteRepository repository
 
-    @RequestMapping("/invasion/{name}")
+    @RequestMapping("/invader/{name}")
     @ResponseBody ResponseEntity quote(@PathVariable String name){
         def quotes = repository.findByName(name)
         if(!quotes) throw new InvaderNotFoundException(name)
