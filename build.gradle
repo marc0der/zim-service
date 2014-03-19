@@ -59,7 +59,7 @@ sourceSets {
 }
 
 task startServer(type: ExecWait, dependsOn: 'assemble') {
-    command 'java -jar build/libs/zim-service.jar'
+    command "java -jar ${projectDir}/build/libs/zim-service.jar"
     ready 'Started Application'
     directory '.'
 }
