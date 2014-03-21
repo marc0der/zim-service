@@ -43,12 +43,6 @@ configurations {
     functTestRuntime.extendsFrom testRuntime
 }
 
-ext {
-    functionalJettyHttpPort = 8037
-    functionalJettyStopPort = 9937
-    functionalJettyStopKey = 'stopKey'
-}
-
 sourceSets {
     functionalTest {
         groovy.srcDir file('src/testFunctional/groovy')
