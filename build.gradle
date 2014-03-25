@@ -1,20 +1,23 @@
-import org.gradle.api.*
-import org.gradle.api.tasks.*
+import com.wiredforcode.gradle.spawn.KillProcessTask
+import com.wiredforcode.gradle.spawn.SpawnProcessTask
 
 buildscript {
     repositories {
         mavenCentral()
         maven { url "http://repo.spring.io/libs-snapshot" }
+        maven { url 'http://dl.bintray.com/vermeulen-mp/gradle-plugins' }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC3"
         classpath 'com.sourcemuse.gradle.plugin:gradle-mongo-plugin:0.1.0'
+        classpath 'com.wiredforcode:gradle-spawn-plugin:0.5.0'
     }
 }
 
 apply plugin: 'spring-boot'
 apply plugin: 'mongo'
 apply plugin: 'groovy'
+apply plugin: 'spawn'
 
 repositories {
     maven {
@@ -52,13 +55,15 @@ sourceSets {
     }
 }
 
-task startServer(type: ExecWait, dependsOn: 'assemble') {
+task startServer(type: SpawnProcessTask, dependsOn: 'assemble') {
     command "java -jar ${projectDir}/build/libs/zim-service.jar"
     ready 'Started Application'
     directory '.'
 }
 
-task stopServer(type: ExecKill)
+task stopServer(type: KillProcessTask) {
+    directory '.'
+}
 
 task functionalTest(type: Test) {
     testClassesDir = sourceSets.functionalTest.output.classesDir
@@ -68,50 +73,3 @@ task functionalTest(type: Test) {
 }
 
 check.dependsOn functionalTest
-
-class ExecWait extends DefaultTask {
-    String command
-    String ready
-    String directory
-
-    @TaskAction
-    def spawnProcess() {
-
-        def pidFile = new File('.gradle-exec-wait.pid')
-        if(pidFile.exists()) throw new GradleException("Server already running!")
-
-        def builder = new ProcessBuilder(command.split(' '))
-        builder.redirectErrorStream(true)
-        builder.directory(new File(directory))
-        def process = builder.start()
-
-        def f = process.class.getDeclaredField("pid")
-        f.accessible = true
-        def pid = f.getInt(process)
-        pidFile << pid
-
-        def line
-        def reader = new BufferedReader(new InputStreamReader(process.getInputStream()))
-        while ((line = reader.readLine()) != null) {
-            println line
-            if (line.contains(ready)) {
-                println "$command is ready"
-                break;
-            }
-        }
-    }
-}
-
-class ExecKill extends DefaultTask {
-    @TaskAction
-    def killProcess(){
-        def pidFile = new File('.gradle-exec-wait.pid')
-        if(!pidFile.exists()) throw new GradleException("No server running!")
-
-        def pid = pidFile.text
-        def cmd = "kill $pid"
-        def process = cmd.execute()
-        process.waitFor()
-        pidFile.delete()
-    }
-}
