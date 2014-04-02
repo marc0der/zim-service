@@ -4,31 +4,27 @@ import com.wiredforcode.gradle.spawn.SpawnProcessTask
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "http://repo.spring.io/libs-snapshot" }
         maven { url 'http://dl.bintray.com/vermeulen-mp/gradle-plugins' }
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC3"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RELEASE"
         classpath 'com.sourcemuse.gradle.plugin:gradle-mongo-plugin:0.1.0'
         classpath 'com.wiredforcode:gradle-spawn-plugin:0.5.0'
     }
 }
 
-apply plugin: 'spring-boot'
 apply plugin: 'mongo'
 apply plugin: 'groovy'
 apply plugin: 'spawn'
+apply plugin: 'spring-boot'
 
 repositories {
-    maven {
-        mavenCentral()
-        url 'http://repo.spring.io/milestone'
-    }
+    mavenCentral()
 }
 
 dependencies {
     compile "org.codehaus.groovy:groovy:2.2.2"
-    compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC4"
+    compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.data:spring-data-commons:1.6.2.RELEASE"
     compile "org.springframework.data:spring-data-mongodb:1.4.0.RELEASE"
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
