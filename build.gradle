@@ -32,7 +32,7 @@ dependencies {
     testCompile 'info.cukes:cucumber-junit:1.1.5'
     testCompile 'info.cukes:cucumber-groovy:1.1.5'
     testCompile 'com.github.groovy-wslite:groovy-wslite:0.8.0'
-    testCompile "org.mongodb:mongo-java-driver:2.9.1"
+    testCompile "org.mongodb:mongo-java-driver:2.12.0"
 }
 
 test.testLogging.exceptionFormat = 'full'
