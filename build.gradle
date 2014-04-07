@@ -9,7 +9,7 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RELEASE"
         classpath 'com.sourcemuse.gradle.plugin:gradle-mongo-plugin:0.1.0'
-        classpath 'com.wiredforcode:gradle-spawn-plugin:0.5.0'
+        classpath 'com.wiredforcode:gradle-spawn-plugin:0.5.2'
     }
 }
 
@@ -54,12 +54,9 @@ sourceSets {
 task startServer(type: SpawnProcessTask, dependsOn: 'assemble') {
     command "java -jar ${projectDir}/build/libs/zim-service.jar"
     ready 'Started Application'
-    directory '.'
 }
 
-task stopServer(type: KillProcessTask) {
-    directory '.'
-}
+task stopServer(type: KillProcessTask)
 
 task functionalTest(type: Test) {
     testClassesDir = sourceSets.functionalTest.output.classesDir
