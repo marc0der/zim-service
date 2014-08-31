@@ -46,8 +46,8 @@ configurations {
 
 sourceSets {
     functionalTest {
-        groovy.srcDir file('src/testFunctional/groovy')
-        resources.srcDir     file('src/testFunctional/resources')
+        groovy.srcDir file('src/functional/groovy')
+        resources.srcDir     file('src/functional/resources')
         compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.functTestCompile
         runtimeClasspath = output + compileClasspath + configurations.functTestRuntime
     }

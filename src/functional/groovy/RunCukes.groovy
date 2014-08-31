@@ -5,8 +5,8 @@ import org.junit.runner.RunWith
 @Cucumber.Options(
     format=["pretty", "html:build/reports/cucumber"],
     strict=true,
-    features=["src/testFunctional/cucumber"],
-    glue=["src/testFunctional/steps"],
+    features=["features"],
+    glue=["src/functional/steps"],
     tags = ["~@ignore"]
 )
 class RunCukes {}
