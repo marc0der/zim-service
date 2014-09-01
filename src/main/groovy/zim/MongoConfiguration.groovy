@@ -1,6 +1,7 @@
 package zim
 
 import com.mongodb.Mongo
+import com.mongodb.MongoClient
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 
@@ -12,10 +13,6 @@ class MongoConfiguration extends AbstractMongoConfiguration {
     }
 
     Mongo mongo() throws Exception {
-        new Mongo()
-    }
-
-    String getMappingBasePackage() {
-        "zim"
+        new MongoClient()
     }
 }
