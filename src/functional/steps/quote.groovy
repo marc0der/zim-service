@@ -1,35 +1,30 @@
-import com.mongodb.BasicDBObject
-import com.mongodb.MongoClient
-import com.mongodb.WriteConcern
-import wslite.rest.RESTClient
+import support.Http
+import support.Mongo
 
 import static cucumber.api.groovy.EN.And
-import static cucumber.api.groovy.Hooks.*
+import static cucumber.api.groovy.Hooks.After
+import static cucumber.api.groovy.Hooks.Before
 
-Before(){
-    client = new RESTClient("http://localhost:8080")
-    def mongo = new MongoClient()
-    mongo.writeConcern = WriteConcern.NORMAL
-    db = mongo.getDB("invasion")
-    quotes = db.createCollection("quote", new BasicDBObject())
+Before() {
+    client = Http.primeRestClient()
+    db = Mongo.primeDatabase("invasion")
+    quotes = Mongo.createCollection(db, "quote")
 }
 
-After(){
-    db.getCollection("quote").drop()
+After() {
+    Mongo.dropCollection(db, "quote")
 }
 
 And(~'^an Invader named "([^"]*)"$') { String invader ->
-    quotes.insert(new BasicDBObject("name", invader))
+    Mongo.insertInvader(quotes, invader)
 }
 
 And(~'^the Invader "([^"]*)" says "([^"]*)"$') { String invader, String message ->
-    def query = new BasicDBObject("name", invader)
-    def update = new BasicDBObject("name", invader).append("message", message)
-    quotes.update(query, update)
+    Mongo.updateInvader(quotes, invader, message)
 }
 
 And(~'^a Quote is requested for "([^"]*)"$') { String invader ->
-    response = client.get(path:"/invader/${invader}")
+    response = Http.getInvader(client, invader)
 }
 
 And(~'^we hear "([^"]*)"$') { String quote ->
