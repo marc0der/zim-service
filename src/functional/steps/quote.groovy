@@ -1,9 +1,8 @@
 import support.Http
 import support.Mongo
 
-import static cucumber.api.groovy.EN.And
-import static cucumber.api.groovy.Hooks.After
-import static cucumber.api.groovy.Hooks.Before
+import static cucumber.api.groovy.EN.*
+import static cucumber.api.groovy.Hooks.*
 
 Before() {
     client = Http.primeRestClient()
