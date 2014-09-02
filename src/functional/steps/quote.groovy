@@ -1,4 +1,3 @@
-import cucumber.api.PendingException
 import support.Http
 import support.Mongo
 import wslite.rest.RESTClientException
@@ -33,9 +32,9 @@ And(~'^a Quote is requested for "([^"]*)"$') { String invader ->
 }
 
 And(~'^we hear "([^"]*)"$') { String quote ->
-    assert response.statusCode == 200
     assert response.json.message == quote
 }
-Then(~'^the Invader is Not Found$') { ->
-    assert response.statusCode == 404
+
+And(~'^the status is (\\d+)$') { int status ->
+    assert response.statusCode == status
 }
