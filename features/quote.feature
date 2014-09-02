@@ -11,3 +11,7 @@ Feature: Invader Quotes
     And the Invader "GIR" says "Can I be a mongoose dog?"
     When a Quote is requested for "GIR"
     Then we hear "Can I be a mongoose dog?"
+
+  Scenario: No Invader is found
+    When a Quote is requested for "unknown"
+    Then the Invader is Not Found
