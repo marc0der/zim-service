@@ -1,7 +1,11 @@
 package zim
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
+
+@Document
 class Quote {
-    BigInteger id
+    @Id BigInteger id
     String name
     String message
 }

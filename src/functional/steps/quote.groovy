@@ -1,40 +1,45 @@
 import support.Http
 import support.Mongo
-import wslite.rest.RESTClientException
+import wslite.http.HTTPClientException
 
 import static cucumber.api.groovy.EN.*
-import static cucumber.api.groovy.Hooks.*
+import static cucumber.api.groovy.Hooks.After
+import static cucumber.api.groovy.Hooks.Before
+import static support.Http.getInvader
+import static support.Mongo.*
+import static support.Mongo.primeDatabase
+
+client = Http.primeRestClient()
+db = primeDatabase("invasion")
 
 Before() {
-    client = Http.primeRestClient()
-    db = Mongo.primeDatabase("invasion")
-    quotes = Mongo.createCollection(db, "quote")
+    quotes = createCollection(db, "quote")
 }
 
 After() {
-    Mongo.dropCollection(db, "quote")
+    dropCollection(db, "quote")
 }
 
-And(~'^an Invader named "([^"]*)"$') { String invader ->
-    Mongo.insertInvader(quotes, invader)
+Given(~'^an Invader named "([^"]*)"$') { String name ->
+    insertInvader(quotes, name)
 }
 
-And(~'^the Invader "([^"]*)" says "([^"]*)"$') { String invader, String message ->
-    Mongo.updateInvader(quotes, invader, message)
+And(~'^the Invader "([^"]*)" says "([^"]*)"$') { String name, String message ->
+    updateInvader(quotes, name, message)
 }
 
-And(~'^a Quote is requested for "([^"]*)"$') { String invader ->
+When(~'^a Quote is requested for "([^"]*)"$') { String name ->
     try {
-        response = Http.getInvader(client, invader)
-    } catch (RESTClientException rce) {
+        response = getInvader(client, name)
+    } catch (HTTPClientException rce) {
         response = rce.response
     }
 }
 
-And(~'^we hear "([^"]*)"$') { String quote ->
-    assert response.json.message == quote
+Then(~'^the status is (\\d+)$') { int status ->
+    assert response.statusCode == status
 }
 
-And(~'^the status is (\\d+)$') { int status ->
-    assert response.statusCode == status
+And(~'^we hear "([^"]*)"$') { String message ->
+    assert response.json.message == message
 }

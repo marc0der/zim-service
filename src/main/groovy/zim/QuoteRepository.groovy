@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface QuoteRepository extends MongoRepository<Quote, BigInteger> {
-    List<Quote> findByName(String name)
+    Quote findByName(String name)
 }
