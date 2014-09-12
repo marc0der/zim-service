@@ -10,14 +10,14 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.1.6.RELEASE"
         classpath 'com.sourcemuse.gradle.plugin:gradle-mongo-plugin:0.1.0'
-        classpath 'com.wiredforcode:gradle-spawn-plugin:0.5.2'
+        classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
     }
 }
 
 apply plugin: 'spring-boot'
 apply plugin: 'mongo'
 apply plugin: 'groovy'
-apply plugin: 'spawn'
+apply plugin: 'com.wiredforcode.spawn'
 
 repositories {
     jcenter()
