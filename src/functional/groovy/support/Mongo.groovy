@@ -21,13 +21,7 @@ class Mongo {
         db.getCollection(name).drop()
     }
 
-    static insertInvader(DBCollection collection, String invader) {
-        collection.insert(new BasicDBObject("name", invader))
-    }
-
-    static updateInvader(DBCollection collection, String invader, String message) {
-        def query = new BasicDBObject("name", invader)
-        def update = new BasicDBObject("name", invader).append("message", message)
-        collection.update(query, update)
+    static insertInvader(DBCollection collection, String name, String message) {
+        collection.insert(new BasicDBObject("name", name).append("message", message))
     }
 }
